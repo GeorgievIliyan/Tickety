@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function LoginForm() {
   const router = useRouter();
@@ -32,21 +37,56 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto mt-20 space-y-4">
-      <h1 className="text-xl font-semibold">Log in</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-background to-muted p-4">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Log in</CardTitle>
+          <CardDescription>Enter your credentials to access your tickets</CardDescription>
+        </CardHeader>
 
-      {error && (
-        <p className="text-red-500 text-sm border border-red-200 bg-red-50 rounded px-3 py-2">
-          {error}
-        </p>
-      )}
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-      <input name="email" type="email" placeholder="Email" required className="w-full border rounded px-3 py-2" />
-      <input name="password" type="password" placeholder="Password" required className="w-full border rounded px-3 py-2" />
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium">
+                Email
+              </label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="your@email.com"
+                required
+                disabled={loading}
+              />
+            </div>
 
-      <button type="submit" disabled={loading} className="w-full bg-black text-white rounded px-3 py-2 disabled:opacity-50">
-        {loading ? "Logging in..." : "Log in"}
-      </button>
-    </form>
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-medium">
+                Password
+              </label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Logging in..." : "Log in"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

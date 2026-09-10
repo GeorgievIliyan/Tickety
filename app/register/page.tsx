@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -42,40 +47,70 @@ export default function RegisterPage() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto mt-20 space-y-4">
-      <h1 className="text-xl font-semibold">Create an account</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-background to-muted p-4">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Create account</CardTitle>
+          <CardDescription>Join Tickety and start buying tickets</CardDescription>
+        </CardHeader>
 
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-      <input
-        name="name"
-        type="text"
-        placeholder="Name"
-        className="w-full border rounded px-3 py-2"
-      />
-      <input
-        name="email"
-        type="email"
-        placeholder="Email"
-        required
-        className="w-full border rounded px-3 py-2"
-      />
-      <input
-        name="password"
-        type="password"
-        placeholder="Password"
-        required
-        minLength={8}
-        className="w-full border rounded px-3 py-2"
-      />
+            <div className="space-y-2">
+              <label htmlFor="name" className="text-sm font-medium">
+                Name
+              </label>
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Your name"
+                disabled={loading}
+              />
+            </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-black text-white rounded px-3 py-2 disabled:opacity-50"
-      >
-        {loading ? "Creating account..." : "Register"}
-      </button>
-    </form>
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium">
+                Email
+              </label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="your@email.com"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-medium">
+                Password
+              </label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="At least 8 characters"
+                required
+                minLength={8}
+                disabled={loading}
+              />
+            </div>
+
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Creating account..." : "Register"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
