@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import clientPromise from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
 export async function GET(request: NextRequest) {
   const session = await auth();
@@ -11,7 +12,9 @@ export async function GET(request: NextRequest) {
   const client = await clientPromise;
   const db = client.db();
 
-  const user = await db.collection("users").findOne({ name: session.user.name });
+  const user = await db.collection("users").findOne({ 
+    _id: new ObjectId(session.user.id) 
+  });
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
